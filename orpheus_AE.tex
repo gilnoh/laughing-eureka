@@ -17,7 +17,7 @@
 \usepackage{url} 
 %% 
 
-\journal{Journal of Applied Energy} % May or May not 
+\journal{Journal of Applied Energy} % or, Journal of Energy 
 
 %% `Elsevier LaTeX' style
 \bibliographystyle{elsarticle-num}
@@ -25,15 +25,15 @@
 
 \begin{document}
 
-%% simple marking / comment 
-\newcommand{\gil}[1]{\textbf{Gil: #1}\\}
+%% simple comment command 
 \newcommand{\todo}[1]{\textbf{TODO: #1}\\}
 
 \begin{frontmatter}
 
-\title{An Investigation on Hybrid Energy Grid Optimization\tnoteref{mytitlenote}}
-\tnotetext[mytitlenote]{This paper is an extend version of .}
+\title{An Investigation Process for Hybrid Energy Grid Optimization}
 
+%\title{An Investigation on Hybrid Energy Grid %Optimization}%\tnoteref{mytitlenote}}
+%\tnotetext[mytitlenote]{This paper is an extended version of .}
 
 % \author{Tae-Gil Noh, Daniel Schwabeneder,  Sebastien Nicolas, Anett
 %   Sch\"ulke, } 
@@ -51,50 +51,74 @@
 \author[TUWien]{Daniel Schwabeneder}
 \ead{schwabeneder@eeg.tuwien.ac.at}
 
+\author[AIT]{Daniele Basciotti}
+\ead{Daniele.Basciotti@ait.ac.at}
+
+\author[AIT]{Sawsan Henein}
+\ead{Sawsan.Henein@ait.ac.at}
+
+\author[AIT]{Edmund Widl}
+\ead{Edmund.Widl@ait.ac.at}
+
 \author[NLE]{Sebastien Nicolas}
 \ead{sebastien.nicolas@neclab.eu}
 
-% \author[AIT]{Edmund}
-% \ead{edmund@ait.ac.at}
+\author[TUWien]{Hans Auer}
+\ead{auer@eeg.tuwien.ac.at}
 
 \author[NLE]{Anett Sch\"ulke\fnref{corr}}
 \ead{anett.schuelke@neclab.eu}
 
 \address[NLE]{NEC Laboratories Europe, Kurfuersten-Anlage 36, 69115,
   Heidelberg, Germany}
-\address[TUWien]{EEG, TU Wien, Vienna, Austria}
-%\address[AIT]{AIT, Vienna, Austria} 
+\address[TUWien]{(address of EEG), TU Wien, Vienna, Austria}
+\address[AIT]{(address of AIT), Vienna, Austria} 
 
 \fntext[corr]{Corresponding Author}
 
 \begin{abstract}
-\todo{Rephrase} 
 A hybrid energy network is an energy system operated across different
 domains of energy grids, where energy can be transformed between the
-grids. It is regarded as one good solution for managing volatile
-renewable energy sources in a better way.  
-The paper introduces an investigation platform that is designed to
-develop and evaluate co-operative hybrid energy network control
-strategies. The proposed investigation process consists of two-step
-holistic investigation with simulation-based and economic-model based
-analysis. The process is designed to enable multi-aspect investigation
-on the range of flexibility provided by evolution of hybrid energy
-grids.
+grids. Hybrid energy networks can provide a way of managing volatile 
+renewable energy sources. The paper introduces an investigation
+process that is designed to develop and evaluate co-operative hybrid
+energy network. The proposed investigation process consists of
+two-step holistic investigation with simulation-based and
+economic-model based analysis. The process is designed to enable
+multi-aspect investigation on the range of flexibility provided by
+evolution of hybrid energy grids. The paper first outlines details of
+the process, including adopted simulations, co-simulation technology,
+control optimization methods and economy models. Then, it reports
+investigation results from one case study. 
 \end{abstract}
 
 \begin{keyword}
-Hybrid Energy Network, Economic Modeling, Cooperative Control
-Strategy
+Hybrid Energy Network, Co-simulation, Economic Modeling, 
+Cooperative Control Strategy
 %\texttt{elsarticle.cls}\sep \LaTeX\sep Elsevier \sep template
 %\MSC[2010] 00-01\sep  99-00
 \end{keyword}
-
 \end{frontmatter}
 
 \linenumbers
 
 \section{Introduction}
-\todo{Rephrase, Revise} 
+% \begin{verbatim}
+% + Goal: why we do what we do. 
+% + Problems and our answers
+%   show the several blocks that prohibit us to just go and
+%   investigate hybrid grid.
+%   + obviously hard on real world and also hard on 
+%     simulation ==> ans: co-simulation 
+%   + problem of "synthetic world" ==> ans: 
+%     modeling real-cities as-is first, and start from there. 
+%   + hybrid-grid is more than technical ==> 
+%     ans: sophisticated economical modeling that follows 
+%     up simulation result. 
+% + Closing with status and short summary of initial results
+%   reported in the content. 
+% \end{verbatim}
+
 The electricity grid model is evolving from a hierarchic centralized
 architecture towards a decentralized one. One of the main challenges 
 in this course is the lack of flexibility to integrate high
@@ -106,7 +130,7 @@ times (e.g. storage), or utilized more efficiently in a time- and
 location-effective manner (e.g. local consumption, local
 transformation).   
 Hybrid energy networks can be regarded as one of the opportunities to  
-provide solutions for managing this imbalance \cite{appelrath_2012,lehnhoff2013ict}.  
+provide solutions for managing this imbalance \cite{appelrath_2012}.  
 A hybrid energy network is an energy system operated across
 different domains (such as gas, district heating, and electricity)
 whereby energy can be transformed between the grids: the energy can be
@@ -129,18 +153,40 @@ transmitting energy as electricity and storing energy as gas or as
 warm water in accumulators.  
 
 Investigation of this hybrid evolution path is still in its
-infancy. There has been some investigation of individual components \cite{keirstead_2012,Derksen_2012}, or possible control
-strategies \cite{arnold_2009}, but they generally lack the full
-investigation on the impact of hybridization in real-world
-environment. A thorough investigation, which includes major
-stakeholders that are modeled from a real-world city, will open more
-convincing and exciting new possibilities for the energy network
-evolution.
+infancy. There has been some investigation of individual components
+\cite{keirstead_2012}, or possible control strategies
+\cite{arnold_2009}, but they generally lack the full investigation on 
+the impact of hybridization in real-world environment. A thorough 
+investigation, which includes major stakeholders that are modeled
+from a real-world city, will open more convincing and exciting new 
+possibilities for the energy network evolution. 
 
-The paper introduces an investigation platform that is designed   
+The paper introduces an investigation process that is designed    
 to develop and evaluate co-operative, co-existing hybrid grid control 
-strategies. The process starts with a set of hybridization 
-setups observed from two European cities. The setups represent
+strategies. 
+
+% Problem & Solution? 
+Investigating hybrid energy grid has several additional difficulties
+compared to the investigations on individual energy grids. One of
+the difficulties is the lack of out-of-the-shelf tools that enable
+investigation of  multiple grids in hybrid co-operation. Elements in
+hybrid energy grids (such as CHP, Power to Heat) can affect more than
+one grid simultaneously, and this has to be simulated accurately. We
+adopted co-simulation as a technical solution for this issue, and
+utilized it to connect state-of-the-art domain simulations to form the
+hybrid grid simulation. Another difficulty is that hybrid grid
+investigation is basically long-term, energy grid evolution
+study. Many aspects of hybridization requires new investments and
+requires detailed comparison in terms of investment cost comparison
+against non-hybrid, single-grid level alternative solutions. We
+resolve economical issues by adopting sophisticated economical
+modeling that follows technical investigation results of simulation
+investigation. Thus, we establish a two-step investigation process
+with co-simulation model based investigation and economy model based
+investigation. 
+
+Our investigation first starts with a set of hybridization setups
+observed from two actual European cities. The setups represent
 hybridization chances that are identified from the target sites. 
 A concrete hybridization scenario can be identified from the setups,
 by adding specific technological and economic goals of the
@@ -150,13 +196,26 @@ co-simulation and economic model. The simulation investigation
 focuses on technological and operational impacts, while the
 economic model examines social and economic aspects in the
 long-term. 
-The proposed platform enables researchers to investigate hybrid
-networks in detail, with which one can provide concrete
-recommendations for stakeholders in both technological (operational)
-and economic (strategic) aspects.  
 
-\section{\uppercase{State of the art}}
-\label{sec:soa}
+%The proposed platform enables researchers to investigate
+%hybrid networks in detail, with which one can provide concrete 
+%recommendations for stakeholders in both technological (operational)
+%and economic (strategic) aspects.  
+
+The rest of the paper is organized as follows. Section 2 outlines
+related work. Section 3 introduces the first step of the
+investigation, such as the two target cities and the hybrid chances
+that we have spotted from them. Section 4 describes the two
+underlying energy grid simulations, while Section 5 summarizes how the
+two domain simulations are connected to form a hybrid energy grid
+simulation environment. Section 6 introduces hybrid grid control
+strategy as optimization problem, and Section 7 describes the economy
+model. Section 8 shows the investigation result of one case
+study from Skelleftea, Sweden, and Section 9 concludes the paper. 
+
+
+\section{Related Work}
+\label{sec:related_work}
 With the unbundling of the energy supply chain, technological
 advancements of renewables, support mechanisms to promote their
 installation, increasing environmental awareness and more active
@@ -179,6 +238,21 @@ flexibility of demand.
 However, the challenge will probably not be solved by one of these
 options alone and the storage and flexibility potentials on the
 electricity domain are limited. 
+The first option is neither desirable from an
+economic, nor from an environmental point-of-view. However, nowadays
+this is often the only possibility available. The second alternative
+is very costly, currently subject to many political and public
+discussions and might be necessary anyway. However, it probably will
+not be a sufficient solution on its own. The economic potential of
+electric energy storages is limited due to the high investment cost
+and the phenomenon of economic cannibalism of storages: The
+profitability of electric storages depends on the spread of
+electricity prices (at least in the current market design) and, at
+the same time, increasing storage capacity
+is reducing this spread. Regarding the flexibility of demand, many
+smart grid projects related to demand response, virtual power plants
+and similar approaches are currently being implemented. However, the
+potential on the electricity domain only is limited. 
 
 Considering other energy domains and networks (gas, district
 heating) as well can significantly increase the storage capacity and
@@ -205,11 +279,12 @@ an increased electricity demand could support network operation.
 
 The topic of hybrid energy grid is getting more interests recently. 
 Behavior of individual components \cite{keirstead_2012}, optimizing
-local controls \cite{etransport, arnold_2009}, or infrastructural
+local controls \cite{etransport}\cite{arnold_2009}, or infrastructural
 planning \cite{infraplan} have been investigated before. 
 Compared to previous work, the proposed process of this paper is more
 holistic and aims to deliver the whole picture, and focuses on the
 evolutionary path of the existing energy networks. 
+
 One special focus here is exploiting the synergies among different
 energy domains and, hence, increasing the flexibility of energy
 networks and facilitating the integration of RES. The approach
@@ -220,32 +295,33 @@ situations. Moreover, this process aims to identify barriers in
 today’s regulations and go beyond current market rules to examine
 possible future hybrid control strategies and business models. 
 
-\section{\uppercase{Hybrid-grid Investigation: 
-Setups and Requirements}}
-\label{sec:req}
+\section{Identifying Hybrid Setups from Two European Cities} 
+\label{sec:identifying_hybrid}
+% \begin{verbatim}
+% + Introduction to Orpheus context, two cities ... 
+% + Hybrid "scenarios": borrow a lot from Motivation paper 
+% \end{verbatim}
 
-\subsection{Identifying Hybrid Setups from the Two European Cities}
-\label{sec:req-1}
+\todo{Gil, revise the table} 
 
 \begin{table*}[t]
+  \small
   \centering
   \caption{Three Hybrid Setups from the Two Cities.}
   \label{tab:1}
-  \begin{tabular}{|p{3cm}|p{4cm}|p{4cm}|p{2cm}|}
+  \begin{tabular}{|p{2cm}|p{3cm}|p{3cm}|p{2cm}|}
     \hline
     Name & Involved Stakeholders & Hybrid Means & Target Site \\ \hline
-    {\em Co-operative suppliers} & Energy providers, DSO & Co-operative District \& Power grids & Skellefte\aa \\ \hline 
-    {\em Prosumer community} & Consumers with RES, and DSO & Consumers with RES, and DSO & Ulm \\ \hline 
+    {\em Co-operative suppliers} & Energy providers, DSO & Co-operative District \& Power grids & Skellefte\aa \\ \hline
+    {\em Prosumer community} & Consumers with RES, and DSO & Consumers with RES, and DSO & Ulm \\ \hline
     {\em Interacting providers \& consumers} & All of the above & All of the above with higher ICT connectivity & Both\\ \hline  
   \end{tabular}
 \end{table*}
-
-% (reduced, maybe in intro / SoA, not here.) 
 % One of the main goals of the paper is to investigate the impact of {\em
-%   co-operative, co-existence control} over multiple energy grids of
+% co-operative, co-existence control} over multiple energy grids of
 % future cities, and to understand the range of flexibility given
 % through the coupling of the energy grids.  
-
+% \noindent
 The investigation process is first initialized by spotting possible
 hybrid chances from two actual European sites. 
 Our target sites are the city of Skellete\aa , Sweden, and two
@@ -264,7 +340,6 @@ and 300 respectively. Both are characterized by relatively high-level
 of PV penetration: 21 panels and 233kWp in Einsingen, 58 panels and 
 1.16MWp in Hittistetten. In addition to power grid, they have
 gas-grids that serve as the most common means of heating.  
-%There are also some houses with oil and electric boiler.  
 
 With close support from the energy providers and the DSOs 
 in Skellefte{\aa} and Ulm, we have identified three {\em hybrid
@@ -300,70 +375,163 @@ The idea is to identify and investigate hybrid scenarios that can be
 repeated at other European cities. Note that each setup only provides
 a general direction, which is still without specific tools or
 goals. To form an actual investigation question,  {\em control
-  goals} and {\em hybrid-means} should be added (Section
-\ref{sec:hol}). 
-%Section \ref{sec:hol} introduces the process of making {\em hybrid
-%  scenario} in more detail.    
+  goals} and {\em hybrid-means} should be added. 
+%(Section \ref{sec:holistic_investigation}). 
+Section \ref{sec:holistic_investigation} introduces the process of
+making {\em hybrid scenario} in more detail. However, the paper will
+first visit components required for the proposed investigation
+method. 
 
-\subsection{Requirements for Hybrid-grid Investigation}
-\label{sec:req-2}
-Before designing actual investigation process, the requirements of the
-two target sites had been surveyed first. 
-It is not possible to list all of them due to space, but the
-identified requirements can be summarized into the following three
-groups.  
+%%%
+%%%
+%%%
+\section{Individual Energy Grid Simulations}
+\label{sec:individual_sim}
+This section introduces two individual energy grid
+simulations. Section \ref{sec:power_sim} describes power grid
+simulations, and Section \ref{sec:heat_sim} describes district heating
+grid simulation. They provide the simulation components for hybrid grid 
+simulations, which are connected by the co-simulation technology
+(Section \ref{sec:cosim}). 
+\subsection{Simulating Power Grids} 
+\label{sec:power_sim}
+\todo{Sawsan}
+\begin{verbatim}
++ Introduction/Summary of power grid simulation part of Orpheus
+  + Both a) general introduction of the tool & environment 
+  + And b) efforts and details (how we build) of the target 
+    city simulation models (data, modeling, etc etc) 
+  + And finally, modifications done for adding hybrid 
+    aspects. (coupling points were added like this, and 
+    they are modeled like this.) 
+  + (+ misc. details expected on the studies like ours.) 
 
-\paragraph{Impact of co-operative control on technological aspects}
-The investigation must enable us the observation of impacts of
-varying degrees of hybridization and different co-operative
-controls. For example, usual evaluation metrics on power grids and
-heat grids, such as voltage quality of LV-grid or heat-losses of
-DH-grid, should be measurable and comparable with and without
-co-operative hybrid strategies. 
++ Amount: no need to be long, but detail enough for other 
+  simulation users to understand how it is done, and on 
+  which level of detail 
+\end{verbatim}
 
-\paragraph{Impact of co-operative control on social-economic aspects} 
-The investigation process should be able to clarify and show social
-and economic impacts of the co-operative control. This not only
-includes basic cost analysis, but also has to process more
-sophisticated issues such as guaranteeing mutual benefits
-(Pareto-criteria), regulatory aspects, and conditions for new business
-models. 
+\subsection{Simulating District Heating Grids}
+\label{sec:heat_sim}
+\todo{Daniele} 
+\begin{verbatim}
++ Introduction/Summary of DH grid simulation part of Orpheus 
+  + Both a) general introduction of the tool & environment 
+  + And b) efforts and details (how we built) of target 
+    city models. (data gathering, modeling, etc) 
+  + And finally, modifications done for adding hybrid 
+    aspects. (coupling points were added like this, and 
+    they are modeled like this.) 
+  + (+ misc. details expected on the studies like ours.) 
 
-\paragraph{Impact of data on co-operative control}
-Synergy of co-operative control strategy depends a lot on data. 
-This includes prediction (price, demand) data, meteorological data,
-and finally sensor data and their supporting ICT
-infrastructures. Impact of various data accuracy and resolution levels 
-on the performance of co-operative hybrid energy grid should be
-explored. 
++ Amount: this part is okay to be long, especially our main 
+  focus is on DH grid side on SKR. 
+\end{verbatim}
+%%%
+%%%
+%%%
+\section{Connecting Domain Grid Simulations with Co-simulation}
+\label{sec:cosim}
+\todo{Edmund}
+\begin{verbatim}
++ Description of co-simulation 
+  + Solid (self-contained) summary / introduction of 
+    co-simulation tech used in Orpheus. 
+  + Some justification (Why co-simulation is a good choice?) 
+  + How it was employed and used to connect the above two 
+    domain simulations? 
++ Amount: relatively free -- enough detail required. 
+\end{verbatim}
 
-The identified requirements affect the investigation in two folds:
-first, they provide basis for the evaluation metrics. Second, they
-directly and indirectly affect the design of the investigation
-process. 
-%A two-step holistic investigation process has been established from
-%the identified setups and requirements. 
+\section{Control Strategy for Hybrid Grid Optimization} 
+\label{sec:control}
+\todo{Gil: Expand first? (with D5.3.1 content). Then revise. } 
 
-% In the following two sections, the two major components of economic
-% model (Section \ref{sec:econ}) and control model (Section
-% \ref{sec:control})  are described, and then the investigation process
-% itself (Section \ref{sec:hol}) is presented. 
-     
-\section{\uppercase{Economic Modeling for Hybrid Grids}}
-\label{sec:econ} 
-Before novel cooperative control strategies can be implemented in real
+The scope of hybrid grid control strategy includes major elements
+of the participating grids. It not only includes grid coupling
+devices such as CHP or heat-pump, but also traditional
+elements such as fuel-based boilers or fuel-based generators. The
+control also optimizes market side decisions (e.g. when to
+generate electricity and sell for CHP), and provides signals for
+consumer side (e.g. when to store PV surplus).    
+For the investigation, the control strategy is implemented as one
+central module that can observe and signal all participating
+elements.
+ 
+This central module observes all relevant information over the 
+hybrid grid, and plans best co-operative, co-beneficial decisions over
+the planning horizon. 
+An essential role of the control is to optimize multiple grids
+together to gain benefits that were not realized before in isolated
+grids.   
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=60mm]{figures/control_flow.pdf}
+  \caption{Data Flow of Hybrid Grid Control Optimization.}
+  \label{fig:control}
+\end{figure}
+Fig. \ref{fig:control} shows the conceptual data flow. 
+The flow starts with the data  aggregator. It collects data
+over various data sources such as sensors, market prices, and demand 
+prediction data. 
+The aggregator provides a coherent view over the  grids.  
+The data are then fed into the control optimizer. The optimizer
+processes the data to derive best control decisions. 
+The optimizer has two pre-set inputs. One input is pre-defined models
+of the hybrid-grid elements and the grid structure (control setup),
+and the other is the target for optimization (control target). 
+The two inputs formulate constraints and objectives for mathematical
+optimization, and present the control problem as an optimization
+problem. 
+To resolve this optimization problem, the control module employs
+multiple solvers (mathematical optimizers) to search and optimize.
+This includes various mathematical  programming methods (linear
+programming, quadratic programming) as well as heuristic optimization
+methods (such as genetic algorithm). 
+Once the solvers resolve the problem, the optimizer outputs the
+best control values for the planning horizon. 
+%This represents the best control planning of the module at current
+%moment on the grid elements. 
+The next step is dispatching of the control values. The dispatcher
+sends currently needed control values to actuators, and stores
+planned values to ease and reduce future problem spaces. The
+optimization process is repeated, as data from sensors and prediction
+are updated. For the investigation, the control is initially
+implemented to repeat planning for each 15 minutes. The planning
+horizon is currently fixed to 24 hours. 
+
+Control strategy modeling is similar to modeling of actors in 
+economic model, in the sense that it frames the problem with
+an optimization framework. However, components in the control model
+are generally more detailed and complex (e.g. non-linear) since the 
+control deals with actual devices. Control's optimization behavior is 
+thus heavily affected by technical constraints of grid
+elements, and the control's problem space is limited to short-term
+horizons. % for only within the planning horizon.  
+
+On the contrast, economic model focuses on long-term effects such as
+20 year view on the impact of a new device. 
+Economic model can see and optimize far further in time by simplifying
+and not modeling technical constraints that can be successfully
+handled by control strategy. Thus, economic model requires technical
+investigation results from control-strategy evaluation to clarify what
+can be safely projected within its model as technologically sound.  
+
+\section{Economic Modeling}
+\label{sec:economy_model}
+\todo{Daniel: revise as needed} 
+Before novel cooperative control strategies can be implemented in real 
 life, their economic feasibility has to be validated for each of the
 involved stakeholders. This means that the long-term monetary benefits
 for the actors participating in new control strategies need to be
-%modelled and 
 verified. Thus, it is important to first get a basic
 understanding of the general structure of hybrid energy retail
 markets.
-%, the major market participants and their typical objectives.
 
 \subsection{Market Structure}
 \label{sec:econ-1}
-
+\noindent
 The most important market participants in energy retail markets are
 customers (pro-/consumers), supply companies, and DSOs. Their
 major interactions, roles and typical objectives are illustrated in
@@ -402,6 +570,7 @@ and non-discriminatory third-party access to the grids.
 
 \subsection{Methodology}
 \label{sec:econ-2}
+\noindent
 In most cases, novel cooperative control strategies require clearly
 defined business models. Here it has to be specified which market
 participants are involved and how their role and responsibilities in
@@ -431,11 +600,12 @@ requires that no market participant has higher cost (or lower profit)
 %depending on the respective objective – 
 with the new business model
 than with the status quo. Thus, the formal framework for economic
-modelling consists of individual optimization problems for all
+modeling consists of individual optimization problems for all
 involved market participants. 
 
 \subsection{Economic Models}
 \label{sec:econ-3}
+\noindent
 Since different hybrid control strategies and business models for
 different market participants are analyzed, the economic models have
 to be capable of considering various technology portfolios, several
@@ -457,6 +627,7 @@ market participant.
 
 
 \subsubsection{Customers}
+\noindent
 To minimize their cost for meeting their energy demand, customers
 generally have several possibilities. They can either procure all the
 energy from a supply company via the energy distribution networks at a
@@ -467,9 +638,9 @@ self-generation, conversion and storing.
 %reduce their demand. 
 If the demand of a standard passive customer is
 denoted by $\mathbf{d}$, and the tariff by $\mathbf{p}$, then the cost is given by 
-\begin{equation*}
+\begin{equation}
   C = \sum_{y=1}^{N}(1+r)^{-y} \cdot \sum_{t=1}^{n} \mathbf{p}(y,t)^{T} \cdot \mathbf{d}(y,t)
-\end{equation*}
+\end{equation}
 
 If a prosumer is considered, this cost function can be gradually
 extended to an optimization model by adding new terms and constraints,
@@ -488,14 +659,14 @@ optimization problem of this customer can be written as:
 %  & & \mathbf{q}_{out}^{HP}(y,t) & = \mathbf{COP}^{HP} \cdot \mathbf{q}_{in}^{HP} (y,t), \\
 %  & & \mathbf{q}(y,t), \mathbf{q}_{out}^{HP}(y,t), \mathbf{q}_{in}^{HP}(y,t) & \geq 0.
 %\end{align*} % TODO? make a better align?
-\begin{align*}
+\begin{align}
   & \min \sum_{y=1}^{N}(1+r)^{-y} \cdot \sum_{t=1}^{n} \mathbf{p}(y,t)^T \cdot
   \mathbf{q}(y,t) - I^{HP}, \\
   & \textrm{s.t. } \mathbf{q}(y,t) + \mathbf{q}_{out}^{HP} (y,t)  = \mathbf{d}(y,t) +
                      \mathbf{q}_{in}^{HP} (y,t), \\
   & \phantom{\textrm{s.t. }}\mathbf{q}_{out}^{HP}(y,t) = \mathbf{COP}^{HP} \cdot \mathbf{q}_{in}^{HP} (y,t), \\
   & \phantom{\textrm{s.t. }}\mathbf{q}(y,t), \mathbf{q}_{out}^{HP}(y,t), \mathbf{q}_{in}^{HP}(y,t) \geq 0.
-\end{align*} % TODO? make a better align? Does this look better?
+\end{align} % TODO? make a better align? Does this look better?
 In a similar way other energy conversion technologies as well as
 energy generation and storage systems can be added to the model. 
 
@@ -511,6 +682,7 @@ constraints have to be added, which will not be further elaborated
 here. 
 
 \subsubsection{Supply Companies}
+\noindent
 The supply company model has a very similar structure to the customer
 model. The objective is given by the firm’s profit. The revenue is
 determined by the quantities, retailed to the customers at a certain tariff
@@ -543,6 +715,7 @@ mode of the respective control strategy for business model
 evaluation. 
 
 \subsubsection{Distribution System Operators}
+\noindent
 It has already been mentioned that DSOs are regulated. Within the
 regulatory constraints, however, they try to maximize their
 profit. Their revenue is given by the network charges of their
@@ -561,99 +734,25 @@ under-investments. Cost-of-service or rate-of-return regulations limit
 the profit by a percentage of the investments and, thus, rather
 promote over-investments \cite{auer_2011}.
 
-\section{\uppercase{Co-operative Control Model as 
-Optimization over Planning Horizon}}
-\label{sec:control}
-
-The scope of hybrid grid control strategy includes major elements
-of the participating grids. It not only includes grid coupling
-devices such as CHP or heat-pump, but also traditional
-elements such as fuel-based boilers or fuel-based generators. The
-control also optimizes market side decisions (e.g. when to
-generate electricity and sell for CHP), and provides signals for
-consumer side (e.g. when to store PV surplus).    
-For the investigation, the control strategy is implemented as one
-central module that can observe and signal all participating
-elements.
- 
-This central module observes all relevant information over the 
-hybrid grid, and plans best co-operative, co-beneficial decisions over
-the planning horizon. 
-An essential role of the control is to optimize multiple grids
-together to gain benefits that were not realized before in isolated
-grids.   
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=60mm]{figures/control_flow.pdf}
-  \caption{Conceptual Data Flow of Control Model.}
-  \label{fig:control}
-\end{figure}
-Fig. \ref{fig:control} shows the conceptual data flow. 
-The flow starts with the data  aggregator. It collects data
-over various data sources such as sensors, market prices, and demand 
-prediction data. 
-The aggregator provides a coherent view over the  grids.  
-The data are then fed into the control optimizer. The optimizer
-processes the data to derive best control decisions. 
-The optimizer has two pre-set inputs. One input is pre-defined models
-of the hybrid-grid elements and the grid structure (control setup),
-and the other is the target for optimization (control target). 
-The two inputs formulate constraints and objectives for mathematical
-optimization, and present the control problem as an optimization
-problem. 
-To resolve this optimization problem, the control module employs
-multiple solvers (mathematical optimizers) to search and optimize.
-This includes various mathematical  programming methods (linear
-programming, quadratic programming) as well as heuristic optimization
-methods (such as genetic algorithm). 
-Once the solvers resolve the problem, the optimizer outputs the
-best control values for the planning horizon. 
-%This represents the best control planning of the module at current
-%moment on the grid elements. 
-The next step is dispatching of the control values. The dispatcher
-sends currently needed control values to actuators, and stores
-planned values to ease and reduce future problem spaces. The
-optimization process is repeated, as data from sensors and prediction
-are updated. For the investigation, the control is initially
-implemented to repeat planning for each 15 minutes. The planning
-horizon is currently fixed to 24 hours. 
-
-% the following might be removed (e.g. partially repeated in Section
-% 5) 
-Control strategy modeling is similar to modeling of actors in 
-economic model, in the sense that it frames the problem with
-an optimization framework. However, components in the control model
-are generally more detailed and complex (e.g. non-linear) since the 
-control deals with actual devices. Control's optimization behavior is 
-thus heavily affected by technical constraints of grid
-elements, and the control's problem space is limited to short-term
-horizons. % for only within the planning horizon.  
-
-% On the contrast, economic model focuses on long-term effects such as
-% 20 year view on the impact of a new device. 
-% Economic model can see and optimize far further in time by simplifying
-% and not modeling technical constraints that can be successfully
-% handled by control strategy. Thus, economic model requires technical
-% investigation results from control-strategy evaluation to clarify what
-% can be safely projected within its model as technologically sound.  
-
-\section{\uppercase{Holistic Investigation on the Impact of Hybrid Grid and
-  Co-operative Control Strategy}}
-\label{sec:hol} 
+\section{Holistic Investigation Process}
+\label{sec:holistic_investigation}
+\todo{Gil: revise accordingly; reduce and mention prev. 
+  sections. replace figure.}  
 
 The investigation process as whole can be now explored, with the two
 introduced components of economic and control models.
 
-% Gil: The figure seems not very critical, removing saves some space 
-% \begin{figure}[t]
-%   \centering
-%   \includegraphics[width=40mm]{figures/holistic_flow.pdf}
-%   \caption{The flows of Holistic Investigation (figure to restyle)}
-%   \label{fig:flow}
-% \end{figure}
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=40mm]{figures/holistic_flow.pdf}
+  \caption{The flows of Holistic Investigation (figure to be replaced)}
+  \label{fig:flow}
+\end{figure}
 
-\paragraph{Defining scenario} 
+%% (with new figure) add description on the figure. 
+
+\paragraph{Defining scenario.} 
+\noindent
 The investigation starts by designing a specific hybrid evolution
 scenario. In this paper, a {\em scenario} means a hybrid setup of Table
 \ref{tab:1} instantiated into a concrete situation, bounded by
@@ -668,7 +767,8 @@ require new control strategies.
 This would form a concrete investigation scenario that can be clearly
 evaluated and compared with current state-of-the-art.  
 
-\paragraph{Scenario implementation} 
+\paragraph{Scenario implementation.} 
+\noindent
 Once a scenario is given, the next step is {\em Scenario
   Implementation}. This includes building the simulation models 
 for the target site, implementing the control model that meets the
@@ -685,7 +785,8 @@ contributors of the scenario, including major devices (above mentioned
 CHP and boiler behaviors, simplified), and stakeholders' behavior (the
 expected long-term behavior of power and heat providers). 
 
-\paragraph{Simulation-based investigation} 
+\paragraph{Simulation-based investigation.} 
+\noindent
 The next step is {\em Co-simulation-based investigation}. 
 This step is characterized by many simulation runs for testing the
 control strategies. 
@@ -723,7 +824,8 @@ It includes the modeled control strategy itself (the best control
 strategy among tested), and evaluated performance differences and
 lessons learned from the simulation runs. 
 
-\paragraph{Economic-model-based investigation}
+\paragraph{Economic-model-based investigation.}
+\noindent
 The last step of the investigation is {\em Economic-model-based 
   investigation}. 
 The simulation-based model alone cannot answer all important
@@ -755,37 +857,20 @@ This provides the best perceived way of investments for the given
 scenario, and their expected return, and possible (or needed)
 price-scheme and business models.    
 
-\section{\uppercase{Outlook and Conclusion}}
-\label{sec:con} 
-Currently there are two investigations on-going with the proposed 
-process. One scenario is about providing better peak heating for the
-DH grid of Skellefte{\aa}, in a manner both economically and
-environmentally beneficial (``better peak boiler'' example of Section
-\ref{sec:hol}). 
-For the operational recommendation, it is expected to show the optimal
-size and type of the added boilers, the best co-operative control
-strategy over two grids, and cost and green house gas footprints
-of competing control strategies. For the strategic recommendation, the
-economic model will provide 20-years view of cost and investment
-analysis, with respect to various possible future fuel / electricity
-price changes. 
 
-For Ulm site, the first investigation is about ``storing surplus PV as 
-heat in households'', where the control goals are to maximize local 
-PV consumption, to minimize loads over critical grid elements, and to 
-maximize subscribers' benefits on using surplus power. Operational
-analysis will provide impacts of various heating devices (e-boiler, 
-heat pump) and control strategies, with their impacts on storing PV
-surplus power. Economic analysis will present on what condition the 
-strategies will make sense (such as adoption of new feed-in tariff),
-and comparison to alternatives such as network reinforcement.  
-There are also plans for more advanced hybrid investigations: such as  
-investigating ideal heat/power co-supply in Skellefte{\aa} for the 
-expected 20\% more population in 2030, how to take benefit of  
-hybridization with demand side management, and investigation of new
-business chances in Ulm site with a new hybrid electricity-DH grid, 
-etc.
+\section{Case Study on Skelleftea: Providing Better Peak  Heating via Hybridization}
+\subsection{Introduction to the Hybridization Scenario} 
+\todo{Gil: to write} 
 
+\subsection{Operational Recommendations: Co-simulation based investigation results}
+\todo{Gil: to write} 
+
+\subsection{Strategic Recommendations: Economy model based
+  investigation results} 
+\todo{Daniel: to write}
+
+\section{Conclusion}
+\todo{Gil: Expand and Revise}
 The paper proposed two-step investigation process that enables
 concrete and thorough checking of hybrid energy grid scenarios. The
 competitive edge of the proposed process comes from the approach's
@@ -796,12 +881,9 @@ recommendations for stakeholders of the investigated grids. It is our
 belief that the holistic recommendations will provide valuable
 insights for the possible future energy grid evolution.
 
-% TODO check/get confirmation from Silvia, best ack. format. 
-
 \section*{Acknowledgment}
 We gratefully acknowledge funding and support by the European
 Commission (project OrPHEuS (FP7 ICT-608930)). 
-
 
 %\section*{References}
 
